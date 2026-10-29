@@ -1,15 +1,6 @@
-import { SiteHeader } from "@/components/sections/site-header";
-import { ComingSoon } from "@/components/sections/coming-soon";
-import { SiteFooter } from "@/components/sections/site-footer";
+import { DocsPage } from "@/components/docs/docs-page";
+import { DOCS_HOME_SLUG } from "@/lib/docs";
 
-export default function DocsPage() {
-  return (
-    <>
-      <SiteHeader />
-      <main>
-        <ComingSoon titleKey="Docs" />
-      </main>
-      <SiteFooter />
-    </>
-  );
+export default function DocsIndexPage() {
+  return <DocsPage slug={DOCS_HOME_SLUG} />;
 }

@@ -45,7 +45,7 @@ export function SiteHeader() {
             : "border-b border-transparent",
         )}
       >
-        <div className="mx-auto flex h-16 max-w-6xl items-center gap-4 px-6">
+        <div className="mx-auto flex h-16 max-w-7xl items-center gap-4 px-6">
           {/* Brand */}
           <a
             href="/"

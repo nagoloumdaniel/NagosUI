@@ -1,6 +1,6 @@
 "use client";
 
-import { Logo } from "@/components/ui/logo";
+import { Brand } from "@/components/ui/brand";
 import { useI18n } from "@/components/providers/language-provider";
 
 const GITHUB_URL = "https://github.com/Nagoloum/NagosUI";
@@ -8,13 +8,17 @@ const GITHUB_URL = "https://github.com/Nagoloum/NagosUI";
 export function SiteFooter() {
   const { t } = useI18n();
 
-  return ( 
-    <footer className="border-t border-line px-6 py-12">
-      <div className="mx-auto flex max-w-6xl flex-col items-center justify-between gap-4 sm:flex-row">
-        <div className="flex items-center gap-2 text-sm font-semibold tracking-tight text-fg">
-          <Logo size={24} className="rounded-md" />
-          Nagos<span className="text-accent">UI</span>
-        </div>
+  return (
+    <footer className="border-t border-line px-6 py-5">
+      <div className="mx-auto flex max-w-7xl flex-col items-center justify-between gap-4 sm:flex-row">
+        <a
+          href="/"
+          id="nav-brand"
+          aria-label="NagosUI"
+          className="inline-flex rounded-pill outline-none focus-visible:ring-2 focus-visible:ring-accent/50"
+        >
+          <Brand logoId="nav-logo" />
+        </a>
 
         <nav className="flex items-center gap-6 text-sm text-muted">
           <a className="transition-colors hover:text-fg" href="/composants">

@@ -12,10 +12,31 @@ const outfit = Outfit({
   display: "swap",
 });
 
+const SITE_URL = "https://nagosui.vercel.app";
+const TITLE = "NagosUI — Design system React animé";
+const DESCRIPTION =
+  "Design system React animé : tokens, composants premium et site de documentation. En développement actif.";
+
 export const metadata: Metadata = {
-  title: "NagosUI — Composants frontend premium animés",
-  description:
-    "Librairie de composants React animés, fluides et cinématiques. Par Nagos.",
+  metadataBase: new URL(SITE_URL),
+  title: { default: TITLE, template: "%s · NagosUI" },
+  description: DESCRIPTION,
+  applicationName: "NagosUI",
+  alternates: { canonical: "./" },
+  openGraph: {
+    type: "website",
+    url: SITE_URL,
+    siteName: "NagosUI",
+    title: TITLE,
+    description: DESCRIPTION,
+    locale: "fr_FR",
+    alternateLocale: ["en_US"],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: TITLE,
+    description: DESCRIPTION,
+  },
 };
 
 export default function RootLayout({

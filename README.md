@@ -1,90 +1,119 @@
+<div align="center">
+
 # NagosUI
 
-![Next.js](https://img.shields.io/badge/Next.js-16-black?logo=next.js&logoColor=white)
-![React](https://img.shields.io/badge/React-19-61DAFB?logo=react&logoColor=black)
-![TypeScript](https://img.shields.io/badge/TypeScript-5-3178C6?logo=typescript&logoColor=white)
-![Tailwind CSS](https://img.shields.io/badge/Tailwind_CSS-v4-06B6D4?logo=tailwindcss&logoColor=white)
-![Motion](https://img.shields.io/badge/Motion-12-FF0088?logo=framer&logoColor=white)
-![Turborepo](https://img.shields.io/badge/Turborepo-2-EF4444?logo=turborepo&logoColor=white)
-![pnpm](https://img.shields.io/badge/pnpm-10-F69220?logo=pnpm&logoColor=white)
+**Design system React animé : tokens, composants premium et site de documentation.**
 
-**Une librairie de composants React premium et animés, dont vous gardez 100 % du code.**
+[Démo](https://nagosui.vercel.app) · [Documentation](https://nagosui.vercel.app/docs) · [Contribuer](CONTRIBUTING.md) · [Sécurité](SECURITY.md)
 
-## Description
+![Statut](https://img.shields.io/badge/statut-en%20cours%20(early--stage)-orange)
+![Next.js](https://img.shields.io/badge/Next.js-16.2-black)
+![React](https://img.shields.io/badge/React-19.2-61dafb)
+![Tailwind](https://img.shields.io/badge/Tailwind-4.3-38bdf8)
 
-NagosUI est un monorepo pnpm/Turborepo composé d'une librairie de composants React (`@nagos/ui`) et d'un site vitrine (`apps/showcase`) qui la présente. Le design system repose sur des design tokens Tailwind CSS v4 (couleurs, rayons, ombres, easings) centralisés dans un fichier `theme.css`, et les composants sont animés avec **Motion**. Comme pour shadcn/ui, l'esprit de distribution est de ne pas imposer une dépendance boîte noire : `@nagos/ui` est consommé comme un package du workspace dont le code source est directement visible et modifiable, plutôt qu'un paquet compilé et figé.
+</div>
 
-## Fonctionnalités clés
+> **Statut : en cours de développement (early-stage).** Seul le composant `Button` (et sa variante `MagneticButton`) est livré.
+> Rien n'est publié sur npm : les paquets sont `private` en version `0.0.0`.
 
-- **Design tokens centralisés** — `packages/ui/src/styles/theme.css` (tokens visuels Tailwind v4 : couleurs, rayons, ombres, flous, easings) et `packages/ui/src/tokens/motion.ts` (tokens d'animation JS : `EASE`, `SPRING`, `DURATION`). Aucun composant n'hardcode de valeur brute.
-- **Composants animés** — composants construits avec [Motion](https://motion.dev) et [class-variance-authority](https://cva.style/) (ex. `Button` à 5 variants et `MagneticButton`).
-- **Site vitrine Next.js** — pages *Composants*, *Icônes*, *Blocks*, *Templates* et *Docs* (ces quatre dernières sont des sections "à venir" dans l'état actuel du dépôt).
-- **Expérience soignée** — scroll fluide via [Lenis](https://lenis.darkroom.engineering/), thème clair/sombre (`next-themes`), palette de commandes (`cmdk`), et interface bilingue FR/EN.
+<!-- TODO capture : ajouter une vraie capture du site (docs/screenshots/home.png) -->
 
-## Stack technique
+## Situation, problème, solution
 
-- Next.js 16 (App Router) + React 19 + TypeScript 5
-- Tailwind CSS v4 (configuration CSS-first via `@theme`)
-- Motion pour les animations UI
-- Lenis pour le smooth scroll
-- Turborepo + pnpm workspaces pour le monorepo
+**Situation.** Chaque nouveau site front recopie couleurs, ombres, rayons et courbes d'animation.
 
-> Note : `gsap` figure dans les dépendances de `apps/showcase` mais n'est pas encore utilisé dans le code au moment de cette revue — à vérifier/retirer si inutile.
+**Problème.** Les valeurs visuelles dérivent d'un projet à l'autre, et les animations « premium » sont réimplémentées à chaque fois.
 
-## Démo
+**Solution.** Une *Foundation Layer* : une source unique de tokens (visuels en CSS, motion en TypeScript) sur laquelle les composants se construisent sans aucune valeur codée en dur. Changer un token change toute la direction artistique.
 
-Site vitrine en ligne : **[nagosui.vercel.app](https://nagosui.vercel.app)**
+## Composants
 
-## Captures d'écran
+| État | Élément |
+| --- | --- |
+| Livré | `Button` (variantes `primary`, `glass`, `gradient`, `outline`, `ghost` ; tailles `sm` à `xl`, `icon`) |
+| Livré | `MagneticButton` (effet magnétique via le hook `useMagnetic`) |
+| Livré | Tokens CSS (`theme.css`) et tokens de motion (`EASE`, `SPRING`, `DURATION`) |
+| Bientôt | Blocs, icônes, templates (pages « bientôt » dans le showcase) |
 
-| Accueil | Page Composants |
-|---|---|
-| ![Accueil NagosUI](docs/screenshots/home.png) | ![Page Composants](docs/screenshots/composants.png) |
+## Stack (versions résolues dans `pnpm-lock.yaml`)
 
-## Installation / lancement local
+| Techno | Version |
+| --- | --- |
+| Next.js (App Router) | 16.2.6 |
+| React / React DOM | 19.2.6 |
+| TypeScript | 5.9.3 |
+| Tailwind CSS (CSS-first) | 4.3.0 |
+| Motion | 12.38.0 |
+| GSAP | 3.15.0 |
+| Lenis | 1.3.23 |
+| cmdk | 1.1.1 |
+| next-themes | 0.4.6 |
+| lucide-react | 1.16.0 |
+| Turborepo | 2.9.14 |
+| pnpm | 10.33.0 |
 
-Prérequis : Node.js ≥ 20 et pnpm (`packageManager: pnpm@10.33.0`).
+## Architecture
+
+```mermaid
+flowchart LR
+  subgraph ui["packages/ui — @nagos/ui"]
+    T[styles/theme.css<br/>tokens @theme] --> C[components/button]
+    M[tokens/motion.ts<br/>EASE, SPRING, DURATION] --> H[hooks/use-magnetic]
+    H --> C
+  end
+  subgraph app["apps/showcase — Next.js"]
+    P[pages + docs FR/EN]
+    X[palette ⌘K, thème, intro]
+  end
+  ui -- dépendance workspace --> app
+  app -- déploiement --> V[(Vercel)]
+```
+
+```
+apps/showcase/        site vitrine et documentation (FR/EN)
+packages/ui/          @nagos/ui : tokens, hooks, composants
+```
+
+## Modèle de tokens
+
+- **Visuels** : `packages/ui/src/styles/theme.css`, via `@theme` de Tailwind v4 (`--color-*`, `--radius-*`, `--shadow-*`, `--blur-*`, `--ease-*`). Génère les utilitaires (`bg-surface`, `rounded-pill`, `shadow-glow`, `ease-out-expo`...).
+- **Motion** : `packages/ui/src/tokens/motion.ts` (`EASE`, `SPRING`, `DURATION`) pour Motion et GSAP.
+- **Règle** : les composants n'utilisent que ces tokens. Les variantes sont décrites avec CVA (`class-variance-authority`).
+
+Une app branche le système en important `theme.css` dans son `globals.css`.
+
+## Distribution « façon shadcn » via workspace
+
+`@nagos/ui` est consommé comme dépendance `workspace:*` : l'app transpile directement le code source du paquet (`transpilePackages` dans `next.config.ts`, exports pointant vers `src/`). Il n'y a pas de build ni de publication npm à ce stade. Le code reste copiable et personnalisable dans chaque site.
+
+## Défis UI traités
+
+- **Page blanche au retour navigateur** : conflit bfcache + Lenis (commits `d6a544c`, `be7ae14`).
+- **Logo sensible au thème**, sans JS ni flash (composant `Logo`, deux images).
+- **Indicateur d'actif coulissant** dans la sidebar et le sommaire de la documentation.
+- **Transition de thème** fluide.
+- **Tokens-only** : aucune valeur visuelle brute dans les composants.
+
+## Commandes
 
 ```bash
-pnpm install        # installe les dépendances du monorepo
-pnpm dev            # lance le mode dev (toutes les apps via Turborepo)
-pnpm build          # build de production
-pnpm typecheck      # vérification des types
-pnpm lint           # lint
+pnpm install --frozen-lockfile   # dépendances
+pnpm dev                         # développement
+pnpm build                       # build de production
+pnpm typecheck                   # vérification des types
 ```
 
-Le site vitrine démarre ensuite sur `http://localhost:3000`.
+Prérequis : Node >= 20, pnpm 10. `pnpm lint` est déclaré mais aucun paquet ne définit encore de script `lint`.
+Il n'y a pas de tests automatisés pour l'instant.
 
-## Utiliser un composant dans un autre projet
+## Déploiement
 
-Dans l'état actuel du dépôt, il n'existe pas de CLI ni de registre façon `npx shadcn add` : `@nagos/ui` est consommé comme **dépendance de workspace** (`"@nagos/ui": "workspace:*"` dans `apps/showcase/package.json`), ce qui veut dire que le code source du package est directement transpilé et utilisable par les apps du même monorepo, sans build intermédiaire ni paquet publié sur npm.
+Démo : <https://nagosui.vercel.app>. Chaque app de `apps/*` est un projet Vercel distinct. Pour `apps/showcase` : Root Directory = `apps/showcase`, Build Command = `cd ../.. && pnpm turbo run build --filter=showcase`, Install Command = `pnpm install`.
 
-```ts
-import { Button } from "@nagos/ui";
-import "@nagos/ui/theme.css"; // à importer une fois dans globals.css de l'app
-```
+## Contributions et historique
 
-Pour réutiliser un composant **hors du monorepo**, la seule méthode disponible aujourd'hui est de copier manuellement le dossier du composant concerné (ex. `packages/ui/src/components/button/`) ainsi que les tokens (`theme.css`, `motion.ts`) dans le projet cible — dans l'esprit "vous possédez le code" de shadcn/ui, mais sans outillage CLI dédié pour l'instant.
+Projet en développement actif, un seul contributeur : 19 commits entre le 2026-05-16 et le 2026-05-18. 16 de ces commits portent un trailer `Co-Authored-By: Claude Opus 4.7` : le code a été écrit avec l'assistance d'une IA. Voir [CONTRIBUTING.md](CONTRIBUTING.md).
 
-## Structure du monorepo
+## Droits
 
-```text
-NagosUI/
-├── apps/
-│   └── showcase/              # Site vitrine Next.js (déployé sur Vercel)
-│       ├── app/                # Routes : /, /composants, /icons, /blocks, /templates, /docs
-│       ├── components/         # Sections et composants propres au site vitrine
-│       └── lib/                 # i18n, utilitaires
-└── packages/
-    └── ui/                     # @nagos/ui — design system + composants
-        └── src/
-            ├── styles/theme.css   # Tokens visuels (@theme Tailwind v4)
-            ├── tokens/motion.ts   # Tokens motion (EASE, SPRING, DURATION)
-            ├── lib/                # cn()
-            ├── hooks/              # useMagnetic…
-            └── components/         # 1 dossier par composant (button/, …)
-```
-
----
-
-[GitHub @nagoloumdaniel](https://github.com/nagoloumdaniel) · [Portfolio](https://nagoloum.vercel.app)
+Aucune licence n'est accordée pour le moment : **tous droits réservés** par défaut. Le code est visible mais ne peut pas être réutilisé sans autorisation de l'auteur.
