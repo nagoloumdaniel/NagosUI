@@ -16,7 +16,7 @@
 > **Statut : en cours de développement (early-stage).** Seul le composant `Button` (et sa variante `MagneticButton`) est livré.
 > Rien n'est publié sur npm : les paquets sont `private` en version `0.0.0`.
 
-<!-- TODO capture : ajouter une vraie capture du site (docs/screenshots/home.png) -->
+![Page d'accueil du site NagosUI](docs/screenshots/home.png)
 
 ## Situation, problème, solution
 
